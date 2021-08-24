@@ -27,16 +27,7 @@ public struct NeumorphicKit {
     #endif
     
     public static func color(light: ColorType, dark: ColorType) -> Color {
-        #if os(iOS)
-        switch NeumorphicKit.colorSchemeType {
-        case .light:
-            return Color(light)
-        case .dark:
-            return Color(dark)
-        case .auto:
-            return Color(.init { $0.userInterfaceStyle == .light ? light : dark })
-        }
-        #else
+        #if os(macOS)
         switch NeumorphicKit.colorSchemeType {
         case .light:
             return Color(light)
@@ -46,6 +37,15 @@ public struct NeumorphicKit {
             return Color(.init(name: nil, dynamicProvider: { (appearance) -> NSColor in
                 return appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? dark : light
             }))
+        }
+        #else
+        switch NeumorphicKit.colorSchemeType {
+        case .light:
+            return Color(light)
+        case .dark:
+            return Color(dark)
+        case .auto:
+            return Color(.init { $0.userInterfaceStyle == .light ? light : dark })
         }
         #endif
     }
